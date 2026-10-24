@@ -24,13 +24,18 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.13.9'
+          channel: 'stable'
+
+      - name: Fix Legacy Gradle Config
+        run: |
+          # Bypass the unsupported Gradle check by updating the legacy flutter apply rule
+          sed -i 's|apply from: "\$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"|apply from: "\$flutterRoot/packages/flutter_tools/gradle/app_plugin_loader.gradle"\napply from: "\$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"|g' android/app/build.gradle 2>/dev/null || true
 
       - name: Install Dependencies
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
