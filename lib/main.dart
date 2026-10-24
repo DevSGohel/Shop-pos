@@ -17,7 +17,7 @@ class ImpexPosApp extends StatelessWidget {
         useMaterial3: true,
         colorSchemeSeed: const Color(0xFF1E88E5),
         scaffoldBackgroundColor: const Color(0xFFF8F9FA),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 1,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
@@ -424,7 +424,6 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
     final phone = _whatsappController.text.trim();
     final total = _cartTotal;
 
-    // Record order in state
     globalAppState.recordSale(
       customerName: customer,
       phone: phone,
@@ -433,7 +432,6 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
       total: total,
     );
 
-    // Prepare WhatsApp Message
     final billText = StringBuffer();
     billText.writeln('🧾 *BILL RECEIPT - STORE*');
     billText.writeln('--------------------------------');
@@ -509,7 +507,6 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
         builder: (context, _) {
           return Column(
             children: [
-              // Product Selection Grid
               Expanded(
                 flex: 5,
                 child: GridView.builder(
@@ -563,8 +560,6 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
                   },
                 ),
               ),
-
-              // Bottom Billing Panel
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -577,7 +572,6 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Customer input fields
                     Row(
                       children: [
                         Expanded(
@@ -605,8 +599,6 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
                       ],
                     ),
                     const SizedBox(height: 10),
-
-                    // Payment modes
                     Row(
                       children: [
                         _paymentChip('Cash'),
@@ -617,8 +609,6 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
                       ],
                     ),
                     const SizedBox(height: 8),
-
-                    // Cart Items Box
                     Container(
                       height: 110,
                       decoration: BoxDecoration(
@@ -664,8 +654,6 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
                             ),
                     ),
                     const SizedBox(height: 10),
-
-                    // Submit Action Button
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2E7D32),
@@ -719,7 +707,7 @@ class BackendInventoryScreen extends StatelessWidget {
         title: Text(isEdit ? 'Edit ${product.name}' : 'Add New Item'),
         content: SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainBuildContext.min,
             children: [
               TextField(
                 controller: nameCtrl,
