@@ -28,7 +28,7 @@ class ImpexPosApp extends StatelessWidget {
 }
 
 // -------------------------------------------------------------
-// MODELS & IN-MEMORY STORE
+// MODELS & STATE MANAGEMENT
 // -------------------------------------------------------------
 class Product {
   String id;
@@ -149,7 +149,7 @@ class AppState extends ChangeNotifier {
 final globalAppState = AppState();
 
 // -------------------------------------------------------------
-// MAIN TAB NAVIGATION
+// NAVIGATION ROOT
 // -------------------------------------------------------------
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -159,7 +159,7 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _currentIndex = 1; // Default to Counter POS
+  int _currentIndex = 1;
 
   final List<Widget> _pages = const [
     HomeDashboardScreen(),
@@ -232,18 +232,11 @@ class HomeDashboardScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Today\'s Revenue',
-                            style: TextStyle(color: Colors.white70, fontSize: 14),
-                          ),
+                          const Text('Today\'s Revenue', style: TextStyle(color: Colors.white70, fontSize: 14)),
                           const SizedBox(height: 6),
                           Text(
                             '₹${globalAppState.todaySales.toStringAsFixed(0)}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -261,20 +254,12 @@ class HomeDashboardScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'Quick Summary',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+                const Text('Quick Summary', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
-                      child: _statCard(
-                        'Total Products',
-                        '${globalAppState.catalog.length}',
-                        Icons.category,
-                        Colors.blue,
-                      ),
+                      child: _statCard('Total Products', '${globalAppState.catalog.length}', Icons.category, Colors.blue),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -288,10 +273,7 @@ class HomeDashboardScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'Recent Transactions',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+                const Text('Recent Transactions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 if (globalAppState.orders.isEmpty)
                   const Padding(
@@ -322,9 +304,7 @@ class HomeDashboardScreen extends StatelessWidget {
                           order.customerName.isEmpty ? 'Bill #${order.orderId}' : order.customerName,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text(
-                          '${order.paymentMode} • ${order.items.length} items',
-                        ),
+                        subtitle: Text('${order.paymentMode} • ${order.items.length} items'),
                         trailing: Text(
                           '₹${order.totalAmount.toStringAsFixed(0)}',
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -441,9 +421,7 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
     billText.writeln('Date: ${DateTime.now().toLocal().toString().split('.')[0]}');
     billText.writeln('--------------------------------');
     for (var item in _cart) {
-      billText.writeln(
-        '• ${item.product.name} x${item.quantity} = ₹${item.total.toStringAsFixed(0)}',
-      );
+      billText.writeln('• ${item.product.name} x${item.quantity} = ₹${item.total.toStringAsFixed(0)}');
     }
     billText.writeln('--------------------------------');
     billText.writeln('*Total: ₹${total.toStringAsFixed(0)}*');
@@ -491,11 +469,7 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
                 const SizedBox(width: 6),
                 Text(
                   'Online (Synced)',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.green.shade900,
-                  ),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.green.shade900),
                 ),
               ],
             ),
@@ -530,28 +504,13 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                p.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                              ),
+                              Text(p.name, maxLines: 1, overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                               const SizedBox(height: 4),
-                              Text(
-                                '₹${p.price.toStringAsFixed(0)}',
-                                style: const TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Text(
-                                'Stock: ${p.stock}',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: p.stock <= 5 ? Colors.red : Colors.grey.shade600,
-                                ),
-                              ),
+                              Text('₹${p.price.toStringAsFixed(0)}',
+                                  style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 16)),
+                              Text('Stock: ${p.stock}',
+                                  style: TextStyle(fontSize: 12, color: p.stock <= 5 ? Colors.red : Colors.grey.shade600)),
                             ],
                           ),
                         ),
@@ -618,10 +577,7 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
                       ),
                       child: _cart.isEmpty
                           ? const Center(
-                              child: Text(
-                                'Tap items above to add to bill',
-                                style: TextStyle(color: Colors.black45),
-                              ),
+                              child: Text('Tap items above to add to bill', style: TextStyle(color: Colors.black45)),
                             )
                           : ListView.builder(
                               itemCount: _cart.length,
@@ -639,10 +595,7 @@ class _CounterPosScreenState extends State<CounterPosScreen> {
                                         icon: const Icon(Icons.remove_circle_outline, size: 20),
                                         onPressed: () => _removeFromCart(i),
                                       ),
-                                      Text(
-                                        '${item.quantity}',
-                                        style: const TextStyle(fontWeight: FontWeight.bold),
-                                      ),
+                                      Text('${item.quantity}', style: const TextStyle(fontWeight: FontWeight.bold)),
                                       IconButton(
                                         icon: const Icon(Icons.add_circle_outline, size: 20),
                                         onPressed: () => _addToCart(item.product),
@@ -707,7 +660,7 @@ class BackendInventoryScreen extends StatelessWidget {
         title: Text(isEdit ? 'Edit ${product.name}' : 'Add New Item'),
         content: SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainBuildContext.min,
+            mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameCtrl,
@@ -737,19 +690,13 @@ class BackendInventoryScreen extends StatelessWidget {
               if (!isEdit)
                 TextField(
                   controller: catCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Category (Optional)',
-                    border: OutlineInputBorder(),
-                  ),
+                  decoration: const InputDecoration(labelText: 'Category (Optional)', border: OutlineInputBorder()),
                 ),
             ],
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () {
               final name = nameCtrl.text.trim();
@@ -795,9 +742,7 @@ class BackendInventoryScreen extends StatelessWidget {
               return Card(
                 child: ListTile(
                   title: Text(product.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text(
-                    'Price: ₹${product.price.toStringAsFixed(0)} | Stock: ${product.stock} units',
-                  ),
+                  subtitle: Text('Price: ₹${product.price.toStringAsFixed(0)} | Stock: ${product.stock} units'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
